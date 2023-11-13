@@ -2,7 +2,7 @@
 
 /**
  * _which - a function that searchs the PATH directories for a command.
- * @info: a struct tnat contains necessary information.
+ * @info: a struct that contains necessary information.
  * @cmd: the command to search for.
  *
  * Return: The path of cmd if found else NULL.
