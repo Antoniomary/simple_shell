@@ -14,7 +14,7 @@ int _setenv(list *info, const char *name, const char *value, int overwrite)
 	int i, len;
 	char *ptr = _strchr(name, '=');
 
-	if (!ptr)
+	if (!name || *name == '\0' || ptr)
 	{
 		errno = EINVAL, ptr = ptr ? info->argv[1] : "variable";
 		_perror(SH_NAME, info->nth_line, "can't set ", ptr, ": ", "");
