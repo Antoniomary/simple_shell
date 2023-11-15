@@ -142,36 +142,3 @@ void update_exitstatus_var(list *info)
 	_itoa(info->exit_status, num);
 	info->var_head->val = num;
 }
-/*
-int main(void)
-{
-	ssize_t i;
-	char *line;
-	size_t n;
-	var_t *head = NULL, *new;
-
-
-	while (1)
-	{
-		line = NULL;
-		n = 0;
-		printf("enter new var: \n");
-		i = getline(&line, &n, stdin);
-		if (i == -1 || i == 0)
-			break;
-
-		line[i - 1] = '\0';
-
-		if (*line == '0')
-			break;
-
-		new = creat_var(line);
-		add_replace_var(&head, new);
-		printf("----var list----\n");
-		print_var(head);
-	}
-
-	free_var(head);
-
-	return (0);
-}*/
