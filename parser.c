@@ -14,7 +14,7 @@ int (*parser(char *command))(list * info)
 	{"cd", _cd},
 	{"env", _env},
 	{"exit", _exit_},
-/*	{"alias", _alias},*/
+	{"alias", _alias},
 	{"setenv", _mysetenv},
 	{"unsetenv", _myunsetenv}
 	};
