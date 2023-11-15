@@ -122,6 +122,7 @@ int _exit_(list *info);
 int _env(list *info);
 int _mysetenv(list *info);
 int _myunsetenv(list *info);
+int _alias(list *info);
 
 
 /********************* SUB1_MAIN ********************************/
