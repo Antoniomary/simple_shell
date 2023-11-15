@@ -113,8 +113,8 @@ int (*parser(char *command))(list *info);
 /********************* SH_START_UP********************************/
 void sh_start_up(list *info, char **av);
 void shell_init(list *info);
-int env_init(list *info);
-void var_init(list *info);
+void env_init(list *info);
+int var_init(list *info);
 
 /********************* BUILT-INS ********************************/
 int _cd(list *info);
