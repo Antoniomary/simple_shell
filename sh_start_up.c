@@ -68,9 +68,10 @@ void shell_init(list *info)
  */
 void env_init(list *info)
 {
-	int i, shlvl;
+	int i;
+	/*int shlvl;
 	char value[10];
-
+*/
 	/* count variables in environment */
 	for (i = 0; environ[i]; ++i)
 		++info->env_size;
