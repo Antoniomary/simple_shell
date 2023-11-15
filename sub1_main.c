@@ -144,7 +144,7 @@ int execute_cmd(list *info)
 	find_path(info, &cmd_path, info->argv[0]);
 	if (cmd_path) /* cmd exists in path as a normal program */
 	{
-		pid = fork()
+		pid = fork();
 		if (pid < 0) /* fork the process: -1 means failure*/
 		{
 			_perror(NULL, 0, NULL, NULL, NULL, "fork");
