@@ -23,7 +23,7 @@ int _alias(list *info)
 				new = creat_alias(info->argv[i]);
 				if (!new)
 				{
-					eputs("Alias: can't set", info->argv[i], err, 0);
+					eputs("Alias: can't set ", info->argv[i], err, 0);
 					info->exit_status = 1;
 				}
 				else
