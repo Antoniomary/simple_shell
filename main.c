@@ -40,22 +40,23 @@ int main(int ac __attribute__((unused)), char **av)
 					info.exit = true;
 					break;
 				}
-				execute_cmd(&info), free(info.argv);
+				/*dequote(ptr);*/
+				if (is_all_var_def(&info))
+					define_user_var(&info);
+				else
+				{
+					sort_var_from_cmd(&info);
+					substitute_var_alias(&info);
+					execute_cmd(&info);
+				}
 				update_exitstatus_var(&info);
-				dequote(ptr);
+				free(info.argv);
+
 				if ((sep == AND && info.exit_status) || (sep == OR && !info.exit_status))
 					break;
 				cmd = strcmd_and_sep(NULL, "&|", &sep, NULL);
 			}
 			cmd = strcmd_and_sep(!save ? "\0" : save, ";", &sep, &save);
-		}
-
-		if (is_all_var_def(&info))
-			define_user_var(&info);
-		else
-		{
-			sort_var_from_cmd(&info);
-			substitute_var_alias(&info);
 		}
 
 		free(line);
