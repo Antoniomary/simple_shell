@@ -12,7 +12,7 @@ alias_t *creat_alias(char *entry)
 	int i = 0, j = 0, used_quote = false;
 	alias_t *new = malloc(sizeof(alias_t));
 
-	if (new)
+	if (!new)
 		return (NULL);
 
 	/* get name part */
