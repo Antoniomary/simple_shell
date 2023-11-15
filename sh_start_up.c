@@ -69,9 +69,7 @@ void shell_init(list *info)
 void env_init(list *info)
 {
 	int i;
-	/*int shlvl;
-	char value[10];
-*/
+
 	/* count variables in environment */
 	for (i = 0; environ[i]; ++i)
 		++info->env_size;
@@ -98,15 +96,8 @@ void env_init(list *info)
 			exit(1);
 		}
 	}
-	info->env[i] = NULL; /* terminate list */
 
-	/*shlvl = custom_atoi(_getenv(info, "SHLVL"));
-	_itoa(++shlvl, value);
-	if (_setenv(info, "SHLVL", value, 1))
-	{
-		free_env(info);
-		exit(1);
-	}*/
+	info->env[i] = NULL; /* terminate list */
 }
 
 /**
