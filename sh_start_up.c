@@ -99,13 +99,13 @@ void env_init(list *info)
 	}
 	info->env[i] = NULL; /* terminate list */
 
-	shlvl = custom_atoi(_getenv(info, "SHLVL"));
+	/*shlvl = custom_atoi(_getenv(info, "SHLVL"));
 	_itoa(++shlvl, value);
 	if (_setenv(info, "SHLVL", value, 1))
 	{
 		free_env(info);
 		exit(1);
-	}
+	}*/
 }
 
 /**
