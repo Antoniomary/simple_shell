@@ -23,7 +23,7 @@ int isfile(list *info, char *filename)
 	}
 	else
 	{
-		_perror(SH_NAME, 0, "cannot access ", filename, ": ", "stat");
+		_perror(SH_NAME, 0, "Can't open ", filename, NULL, NULL);
 		return (1); /* TODO: watch out ... */
 	}
 
