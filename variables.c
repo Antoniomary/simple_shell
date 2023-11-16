@@ -1,17 +1,5 @@
 #include "shell.h"
-/*
-int print_var(var_t *head)
-{
-	while (head)
-	{
-		_puts(head->name, 1);
-		_puts(head->val, 1);
-		head = head->next;
-	}
 
-	return (0);
-}
-*/
 /**
  * creat_var - a function that creates a variable.
  * @entry: the alias to be created in the form of name=value
