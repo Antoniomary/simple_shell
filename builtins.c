@@ -159,8 +159,7 @@ int _cd(list *info)
 		if (_strcmp(info->argv[1], "-") == 0)
 		{
 			ret = chdir((ptr = _getenv(info, "OLDPWD")));
-			if (ret != -1)
-				_puts(ptr, 1);
+			_puts(ptr ? ptr : old, 1);
 		}
 		else
 		{
