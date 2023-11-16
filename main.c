@@ -1,6 +1,19 @@
 #include "shell.h"
 
 /**
+ * input_manager - a function that helps to get input.
+ * @info: a struct that contains necessary information.
+ * @line: pointer to a line of text.
+ */
+void input_manager(list *info, char **line)
+{
+	/* prints prompt in interactive mode to enter command */
+	if (info->sh_mode == INT_MODE)
+		display_prompt();
+	*line = read_line(info); /* gets the input of the user */
+}
+
+/**
  * main - entry point to a custom shell program.
  * @ac: argument count at command line.
  * @av: argument vector at command line.
@@ -13,19 +26,13 @@ int main(int ac __attribute__((unused)), char **av)
 	char loop = true, *line = NULL, *cmd = NULL, *save = NULL, sep = NUL;
 
 	sh_start_up(&info, av);
-
 	signal(SIGINT, sig_hand); /* handle CTRL + C */
 	while (loop) /* infinite loop */
 	{
-		if (info.sh_mode == INT_MODE) /* i.e interactive mode */
-			display_prompt(); /* prints prompt to enter command */
-
-		line = read_line(&info); /* gets the input of the user */
-		if (remove_comment(line) == 0) /* remove comment from user input */
+		input_manager(&info, &line);
+		/* remove comment from user input and check for syntax error */
+		if (remove_comment(line) == 0 || syntax_error_check(&info, line) == ERROR)
 			continue;
-		if (syntax_error_check(&info, line) == ERROR)
-			continue;
-
 		/* tokenize based on semi-colon delimiters */
 		cmd = strcmd_and_sep(line, ";", &sep, &save);
 		while (cmd && !info.exit)
@@ -44,26 +51,15 @@ int main(int ac __attribute__((unused)), char **av)
 				if (is_all_var_def(&info))
 					define_user_var(&info);
 				else
-				{
-					sort_var_from_cmd(&info);
-					substitute_var_alias(&info);
-					execute_cmd(&info);
-				}
-				update_exitstatus_var(&info);
-				free(info.argv);
-
+					sort_var_from_cmd(&info), substitute_var_alias(&info), execute_cmd(&info);
+				update_exitstatus_var(&info), free(info.argv);
 				if ((sep == AND && info.exit_status) || (sep == OR && !info.exit_status))
 					break;
 				cmd = strcmd_and_sep(NULL, "&|", &sep, NULL);
 			}
 			cmd = strcmd_and_sep(!save ? "\0" : save, ";", &sep, &save);
 		}
-
-		free(line);
-		loop = (info.exit == true) ? false : true;
+		free(line), loop = (info.exit == true) ? false : true;
 	}
-
-	free_env_alias_vars(&info);
-
-	return (info.exit_status);
+	return (free_env_alias_vars(&info), info.exit_status);
 }
