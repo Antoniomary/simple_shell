@@ -167,26 +167,25 @@ int _cd(list *info)
 			ptr = _strcmp(info->argv[1], "~") ? info->argv[1] : _getenv(info, "HOME");
 			ret = chdir(ptr);
 		}
+		if (ret == -1 && ptr != NULL) /* cd was unsuccesful */
+		{
+			_perror(SH_NAME, info->nth_line, "cd: can't cd to ", ptr, "\n", NULL);
+			info->exit_status = 1;
+		}
 	}
 	else
 		ret = chdir((ptr = _getenv(info, "HOME")));
 
-	if (ret == -1) /* cd was unsuccesful */
+	if (ret != -1) /* success */
 	{
-		_perror(SH_NAME, info->nth_line, "cd: can't cd to ", ptr, "\n", NULL);
-		info->exit_status = 1;
-	}
-	else /* success */
 		if (getcwd(cwd, 256))
-		{
-			_setenv(info, "OLDPWD", old, 1);
-			_setenv(info, "PWD", cwd, 1);
-		}
+			_setenv(info, "OLDPWD", old, 1), _setenv(info, "PWD", cwd, 1);
 		else
 		{
 			_perror(SH_NAME, info->nth_line, NULL, env_err, NULL, "");
 			info->exit_status = 1;
 		}
+	}
 
 	return (info->exit_status);
 }
