@@ -49,7 +49,7 @@ void shell_init(list *info)
 			}
 		}
 		else if (status & NONFILE)
-			exit(EXIT_SUCCESS);
+			exit(info->exit_status);
 		else
 		{
 			_perror(SH_NAME, 0, "cannot open ", FILENAME, ": No such file\n", NULL);
