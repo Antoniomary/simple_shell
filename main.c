@@ -47,7 +47,7 @@ int main(int ac __attribute__((unused)), char **av)
 					info.exit = true;
 					break;
 				}
-				/*dequote(ptr);*/
+				dequote(info.argv);
 				if (is_all_var_def(&info))
 					define_user_var(&info);
 				else
