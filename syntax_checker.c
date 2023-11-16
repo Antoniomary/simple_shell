@@ -72,6 +72,7 @@ int unclosed_quote(list *info, char *s)
 int check_cmd_separators(list *info, char *s)
 {
 	int c,  sep = NO, cmd = NO, one = NO, err_status = NO;
+	char *ptr = s;
 
 	while ((err_status == NO) && (c = *s) != '\0')
 	{
@@ -102,7 +103,7 @@ int check_cmd_separators(list *info, char *s)
 		{
 			err_status = YES;
 			info->exit_status = 2;
-			free(s);
+			free(ptr);
 			update_exitstatus_var(info);
 		}
 	}
@@ -123,43 +124,71 @@ int check_cmd_separators(list *info, char *s)
  */
 int check_error(list *info, char *s, int *cmd, int *sep, int one, int c)
 {
-	char *syn = "Syntax error: ", err[5];
+	char *syn = "Syntax error: ", *msg = " unexpected\n", err[5];
 	char *syn_eof = "Syntax error: end of file unexpected\n";
 
 	if (*cmd && *sep)
 	{
 		if (is_op(c))
-		{
-			if (c == ';')
-				_strcpy(err, *(s - 1) == c ? "\";;\"" : "\";\"");
-			else if (c == '|')
-				_strcpy(err, *(s + 1) == c ? "\"||\"" : "\"|\"");
-			else /* c == '&' */
-				_strcpy(err, *(s + 1) == c ? "\"&&\"" : "\"&\"");
-
-			_perror(SH_NAME, info->nth_line, syn, err, " unexpected\n", NULL);
-			return (true);
-		}
+			return (err_detected(info, s, c));
 		else if (c != '\0') /* another cmd is next */
 			*cmd = *sep =  NO;
 		else if (*sep != SEMI) /* only semi can come before '\0' */
-		{
-			_perror(SH_NAME, info->nth_line, syn_eof, NULL, NULL, NULL);
-			return (true);
-		}
+			return (_perror(SH_NAME, info->nth_line, syn_eof, 0, 0, 0), true);
 	}
 	else if (!(*cmd) || one)
 	{
-		if (*sep == AND || *sep == OR)
-			_strcpy(err, *sep == OR ? "\"||\"" : "\"&&\"");
-		else if (one)
-			_strcpy(err, one == OR ? "\"|\"" : "\"&\"");
-		else if (*sep == SEMI)
-			_strcpy(err, *(s - 1) == c ? "\";;\"" : "\";\"");
-
-		_perror(SH_NAME, info->nth_line, syn, err, " unexpected\n", NULL);
-		return (true);
+		if (*sep == OR)
+			_strcpy(err, "\"||\"");
+		else if (*sep == AND)
+			_strcpy(err, "\"&&\"");
+		else if (one == OR)
+			_strcpy(err, "\"|\"");
+		else if (one == AND)
+			_strcpy(err, "\"&\"");
+		else if (*sep == SEMI && *(s - 1) == c)
+			err[0] = '"', err[1] = ';', err[2] = ';', err[3] = '"', err[4] = '\0';
+		else if (*sep == SEMI && *(s - 1) != c)
+			err[0] = '"', err[1] = ';', err[2] = '"', err[4] = '\0';
+		return (_perror(SH_NAME, info->nth_line, syn, err, msg, 0), true);
 	}
 
 	return (false);
+}
+
+/**
+ * err_detected - a function that detects the error in syntax.
+ * @info: pointer to a struct that holds necessary informations.
+ * @s: string to check for the exact error.
+ * @c: a variable to hold a character.
+ *
+ * Return: always true.
+ */
+int err_detected(list *info, char *s, int c)
+{
+	char *syn = "Syntax error: ", err[5];
+	char *msg = " unexpected\n";
+
+	if (c == ';')
+	{
+		err[0] = '"';
+		err[1] = ';', err[2] = ';';
+		err[3] = '"';
+		err[4] = '\0';
+
+		if (*(s - 1) != c)
+			err[2] = '"', err[3] = '\0';
+	}
+	else if (c == '|' && *(s + 1) == c)
+		_strcpy(err, "\"||\"");
+	else if (c == '|' && *(s + 1) != c)
+		_strcpy(err, "\"|\"");
+	else if (c == '&' && *(s + 1) == c)
+		_strcpy(err, "\"&&\"");
+	else if (c == '&' && *(s + 1) != c)
+		_strcpy(err, "\"&\"");
+
+	_perror(SH_NAME, info->nth_line, syn, err, msg, 0);
+
+	return (true);
 }
