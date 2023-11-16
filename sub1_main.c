@@ -55,7 +55,7 @@ char *read_line(list *info)
 		if (close(info->fd) == -1)
 			_perror(SH_NAME, info->nth_line, NULL, NULL, "cannot close ", FILENAME);
 
-	exit(!bytes_read ? EXIT_SUCCESS : EXIT_FAILURE);
+	exit(info->exit_status);
 }
 
 /**
