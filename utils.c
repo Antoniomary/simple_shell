@@ -23,8 +23,9 @@ int isfile(list *info, char *filename)
 	}
 	else
 	{
-		_perror(SH_NAME, 0, "Can't open ", filename, NULL, NULL);
-		return (1); /* TODO: watch out ... */
+		_perror(SH_NAME, 0, "Can't open ", filename, "\n", NULL);
+		info->exit_status = 127;
+		return (1);
 	}
 
 	return (status);
