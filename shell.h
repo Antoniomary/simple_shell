@@ -144,6 +144,7 @@ int syntax_error_check(list *info, char *line);
 int unclosed_quote(list *info, char *s);
 int check_cmd_separators(list *info, char *s);
 int check_error(list *info, char *s, int *cmd, int *sep, int one, int c);
+int err_detected(list *info, char *s, int c);
 
 /********************* WHICH FUNCTION ****************************/
 char *_which(list *info, char *cmd);
