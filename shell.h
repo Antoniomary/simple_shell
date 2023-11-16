@@ -158,6 +158,7 @@ int _getline(char **line, size_t *n, int fd);
 char *_strtok(char *str, const char *delim);
 char *_strtok_o_quote(char *s, const char *delim);
 char *strcmd_and_sep(char *s, const char *delim, char *sep, char **saveptr);
+void dequote(char **entry);
 
 
 /********************* FUNCTION TO REMOVE COMMENT ****************/
