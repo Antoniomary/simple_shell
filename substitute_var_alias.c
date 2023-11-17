@@ -14,6 +14,7 @@ void substitute_var_alias(list *info)
 	{
 		if (info->argv[i][0] == '$' && info->argv[i][1])
 		{
+			/* first check in the environment variables */
 			value = _getenv(info, &info->argv[i][1]);
 			if (value)
 			{
@@ -21,6 +22,7 @@ void substitute_var_alias(list *info)
 				continue;
 			}
 
+			/* if not in env variables, checks user defined variables */
 			value = get_var(info->var_head, &info->argv[i][1]);
 			if (value)
 			{
@@ -28,17 +30,20 @@ void substitute_var_alias(list *info)
 				continue;
 			}
 
+			/* if no such variable, it is removed since it is nothing */
 			for (j = 0; info->argv[i + j]; ++j)
 				info->argv[i + j] = info->argv[i + j + 1];
 			--info->argc;
+			if (info->argv[i] == NULL)
+				break;
 		}
-		else
+		else if (i == 0)
 		{
 			value = get_alias(info->alias_head, info->argv[i]);
 			if (value)
 				info->argv[i] = value;
-			++i;
 		}
+		++i;
 	}
 }
 
