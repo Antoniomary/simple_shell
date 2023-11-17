@@ -111,13 +111,18 @@ int _myunsetenv(list *info)
 {
 	int i, c;
 	char *err1 = "unsetenv: Too many arguments\n";
-	char *err2 = "unsetenv: Too few arguments\n";
-	char *err3 = ": Bad variable name\n";
+	char *err2 = ": Bad variable name\n";
 
-	if (info->argc > 2)
+	if (info->argc == 1)
+	{
+		info->exit_status = 0;
+		return (0);
+	}
+	else if (info->argc > 2)
+	{
 		_perror(SH_NAME, info->nth_line, err1, NULL, NULL, NULL);
-	else if (info->argc < 2)
-		_perror(SH_NAME, info->nth_line, err2, NULL, NULL, NULL);
+		info->exit_status = 1;
+	}
 	else /* info->argv == 2 */
 	{
 		for (i = 0; info->argv[1][i]; ++i)
@@ -125,7 +130,7 @@ int _myunsetenv(list *info)
 			c = info->argv[1][i];
 			if ((!i && !_isallowed(c)) || (!_isallowed(c) && !_isdigit(c)))
 			{
-				_perror(SH_NAME, info->nth_line, "setenv: ", info->argv[1], err3, NULL);
+				_perror(SH_NAME, info->nth_line, "setenv: ", info->argv[1], err2, NULL);
 				info->exit_status = 1;
 				return (1);
 			}
@@ -135,8 +140,6 @@ int _myunsetenv(list *info)
 		info->exit_status = i == 0 ? 0 : 1;
 		return (i);
 	}
-
-	info->exit_status = 1;
 
 	return (1);
 }
