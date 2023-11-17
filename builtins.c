@@ -149,7 +149,7 @@ int _myunsetenv(list *info)
  */
 int _cd(list *info)
 {
-	int ret;
+	int ret = -1;
 	char *ptr = NULL, *old = _getenv(info, "PWD"), cwd[256];
 	char *env_err = "cd: can't set environment: ";
 
@@ -158,7 +158,7 @@ int _cd(list *info)
 	{
 		if (_strcmp(info->argv[1], "-") == 0)
 		{
-			ret = chdir((ptr = _getenv(info, "OLDPWD")));
+			ret = (ptr = _getenv(info, "OLDPWD")) ? chdir(ptr) : -1;
 			_puts(ptr ? ptr : old, 1);
 		}
 		else
@@ -173,7 +173,7 @@ int _cd(list *info)
 		}
 	}
 	else
-		ret = chdir((ptr = _getenv(info, "HOME")));
+		ret = (ptr = _getenv(info, "HOME")) ? chdir(ptr) : -1;
 
 	if (ret != -1) /* success */
 	{
