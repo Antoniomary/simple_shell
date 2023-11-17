@@ -128,7 +128,7 @@ int find_print_alias(alias_t *head, char *name)
 		head = head->next;
 	}
 
-	eputs("alias: ", name, "not found", 1);
+	eputs("alias: ", name, " not found", 1);
 
 	return (1);
 }
