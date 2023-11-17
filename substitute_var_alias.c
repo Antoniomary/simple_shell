@@ -39,8 +39,7 @@ void substitute_var_alias(list *info)
 		}
 		else if (i == 0)
 		{
-			value = get_alias(info->alias_head, info->argv[i]);
-			if (value)
+			while ((value = get_alias(info->alias_head, info->argv[i])))
 				info->argv[i] = value;
 		}
 		++i;
